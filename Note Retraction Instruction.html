@@ -150,6 +150,72 @@
 .email-link {
   color: white;
 }
+
+/* --- Footer additions --- */
+.site-footer {
+  margin-top: 18px;
+  border-top: 0.5px solid #1e3a5f;
+  padding-top: 14px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #78909c;
+}
+.site-footer .footer-contact {
+  font-size: 13px;
+  color: #cce4ff;
+  margin-bottom: 8px;
+}
+.site-footer .footer-contact strong {
+  color: #fff;
+  font-weight: 600;
+}
+.site-footer .footer-contact .email-link {
+  color: #4dd0e1;
+  text-decoration: none;
+  font-weight: 600;
+}
+.site-footer .footer-contact .email-link:hover {
+  color: #fff;
+}
+.site-footer .footer-tags {
+  font-size: 12px;
+  color: #90caf9;
+  margin-bottom: 10px;
+}
+.site-footer .footer-tags .divider {
+  color: #1e5fa8;
+  margin: 0 6px;
+}
+.site-footer .footer-bottom {
+  font-size: 11.5px;
+  color: #78909c;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.site-footer .footer-bottom .divider {
+  color: #1e5fa8;
+  margin: 0 4px;
+}
+.site-footer .footer-bottom .it-badge {
+  background: #0a2a4a;
+  border: 0.5px solid #ffb74d;
+  color: #ffb74d;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.site-footer .footer-bottom .it-badge:hover {
+  color: #fff;
+  border-color: #fff;
+}
+@media (max-width: 480px) {
+  .site-footer .footer-tags .divider { display: none; }
+  .site-footer .footer-tags span { display: block; margin: 2px 0; }
+}
 </style>
 </head>
 <body>
@@ -326,11 +392,24 @@
 
   <div class="divider"></div>
 
-  <div class="footer">
- <!--  <strong> Questions? Contact </strong>&nbsp; <a href= "mailto:VHADURCAC@med.va.gov" class="email-link">VHADURCAC </a>  &nbsp;·&nbsp; Data Analytics &nbsp;·&nbsp; Informatics &nbsp;·&nbsp; CPRS Support &nbsp;·&nbsp; Durham VA Medical Center &nbsp;|&nbsp; Use YourIT for all submissions -->
-    <strong> Questions? Contact </strong>&nbsp; <a href= "mailto:VHADURCAC@med.va.gov" class="email-link">VHADURCAC </a>  &nbsp;·&nbsp; Data Analytics &nbsp;·&nbsp; Informatics &nbsp;·&nbsp; CPRS Support &nbsp;·&nbsp; Durham VA Medical Center &nbsp;|&nbsp; Use YourIT for all submissions
+  <footer class="site-footer">
+    <div class="footer-contact">
+      <strong>Questions? Contact</strong>
+      &nbsp;<a href="mailto:VHADURCAC@med.va.gov" class="email-link">VHADURCAC</a>
+    </div>
 
-  </div>
+    <div class="footer-tags">
+      <span>Data Analytics</span><span class="divider">·</span>
+      <span>Informatics</span><span class="divider">·</span>
+      <span>CPRS Support</span>
+    </div>
+
+    <div class="footer-bottom">
+      <span>Durham VA Medical Center</span>
+      <span class="divider">|</span>
+      <span>Use <a href="https://yourit.va.gov/va?id=sc_cat_item&sys_id=45dd608687efa150765d77f5cebb35ef&cat_id=52031dc01bf5e810a25d0d08ec4bcbdd&catalog_id=b6f0db901b462010a25d0d08ec4bcb47" class="it-badge">YourIT</a> for all submissions</span>
+    </div>
+  </footer>
 
 </div>
 </body>
