@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!--<title>CPRS Note & Image Retraction Poster</title>-->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', Arial, sans-serif;
+    background: #e8edf2;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 30px 20px;
+  }
+  .poster {
+    background: #0a2a4a;
+    color: #fff;
+    width: 900px;
+    padding: 32px 32px 28px;
+    border-radius: 14px;
+  }
+  .header {
+    background: #1565c0;
+    border-radius: 10px;
+    padding: 20px 28px 16px;
+    text-align: center;
+    margin-bottom: 20px;
+    border-left: 6px solid #00bcd4;
+    border-right: 6px solid #00bcd4;
+  }
+  .header .hosp-icon { font-size: 28px; margin-bottom: 8px; }
+  .header h1 { font-size: 24px; font-weight: 600; color: #e3f2fd; margin-bottom: 5px; }
+  .header .sub { font-size: 14px; color: #90caf9; }
+  .badge {
+    display: inline-block;
+    background: #00bcd4; color: #003344;
+    font-size: 12px; font-weight: 600;
+    border-radius: 20px; padding: 4px 16px; margin-top: 10px;
+  }
+  .affected-box {
+    background: #0d2f5a;
+    border-left: 5px solid #ffb74d;
+    border-radius: 7px;
+    padding: 11px 16px;
+    font-size: 13.5px;
+    color: #ffe0b2;
+    margin-bottom: 18px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .affected-box .icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .grid-main { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .card {
+    background: #0d3b6e;
+    border-radius: 10px;
+    padding: 16px 18px;
+    border: 0.5px solid #1e5fa8;
+  }
+  .card-accent { border-top: 4px solid #00bcd4; }
+  .card-green  { border-top: 4px solid #4caf50; }
+  .card-red    { border-top: 4px solid #ef5350; }
+  .card-orange { border-top: 4px solid #ffb74d; }
+  .card h2 {
+    font-size: 12px; font-weight: 600; color: #90caf9;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 7px;
+  }
+  .step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .step-num {
+    min-width: 26px; height: 26px;
+    background: #00bcd4; color: #003344;
+    border-radius: 50%; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-text { font-size: 13.5px; color: #cce4ff; line-height: 1.55; padding-top: 3px; }
+  .step-text strong { color: #fff; font-weight: 600; }
+  .type-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 4px 0 14px 38px; }
+  .type-box { background: #0a2a4a; border-radius: 7px; padding: 10px 13px; border: 0.5px solid #1e5fa8; }
+  .type-label { font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 5px; }
+  .incident-label { color: #ffb74d; }
+  .change-label { color: #4dd0e1; }
+  .type-desc { font-size: 12.5px; color: #90caf9; line-height: 1.45; }
+  .type-desc strong { color: #fff; }
+  .link-btn {
+    display: block;
+    background: #0a2a4a;
+    border: 0.5px solid #1e88e5;
+    border-radius: 7px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #4dd0e1;
+    text-decoration: none;
+    margin-bottom: 8px;
+  }
+  .link-btn .lbl { font-size: 11px; color: #78909c; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .checklist { list-style: none; }
+  .checklist li {
+    font-size: 13px; color: #cce4ff; line-height: 1.5;
+    padding: 7px 0; border-bottom: 0.5px solid #1e3a5f;
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check { color: #4caf50; font-size: 15px; flex-shrink: 0; }
+  .donts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+  .dont-item {
+    font-size: 13px; color: #ffcdd2; padding: 5px 0;
+    display: flex; gap: 9px; align-items: flex-start;
+    border-bottom: 0.5px solid #3b1010;
+  }
+  .xmark { color: #ef5350; font-size: 15px; flex-shrink: 0; }
+  .example-box {
+    background: #0a2a4a;
+    border: 0.5px dashed #1e5fa8;
+    border-radius: 7px;
+    padding: 9px 13px;
+    font-size: 12.5px;
+    color: #90caf9;
+    font-style: italic;
+    margin: 6px 0 14px 38px;
+  }
+  .field-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 14px 38px; }
+  .field-tag {
+    background: #0a2a4a; border: 0.5px solid #1e5fa8;
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 12px; color: #cce4ff;
+  }
+  figure { margin: 6px 0 14px 38px; }
+  figure img {
+    max-width: 100%;
+    border-radius: 7px;
+    border: 0.5px solid #1e5fa8;
+    display: block;
+  }
+  figcaption {
+    font-size: 11.5px; color: #90caf9; margin-top: 6px;
+    font-style: italic;
+  }
+  .divider {
+    height: 1px; background: #1e3a5f; margin: 18px 0;
+  }
+  .footer {
+    text-align: center; margin-top: 18px;
+    font-size: 11.5px; color: #78909c;
+    border-top: 0.5px solid #1e3a5f; padding-top: 12px;
+  }
+  @media print {
+    body { background: none; padding: 0; }
+    .poster { width: 100%; border-radius: 0; }
+  }
+.email-link {
+  color: white;
+}
+
+/* --- Footer additions --- */
+.site-footer {
+  margin-top: 18px;
+  border-top: 0.5px solid #1e3a5f;
+  padding-top: 14px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #78909c;
+}
+.site-footer .footer-contact {
+  font-size: 13px;
+  color: #cce4ff;
+  margin-bottom: 8px;
+}
+.site-footer .footer-contact strong {
+  color: #fff;
+  font-weight: 600;
+}
+.site-footer .footer-contact .email-link {
+  color: #4dd0e1;
+  text-decoration: none;
+  font-weight: 600;
+}
+.site-footer .footer-contact .email-link:hover {
+  color: #fff;
+}
+.site-footer .footer-tags {
+  font-size: 12px;
+  color: #90caf9;
+  margin-bottom: 10px;
+}
+.site-footer .footer-tags .divider {
+  color: #1e5fa8;
+  margin: 0 6px;
+}
+.site-footer .footer-bottom {
+  font-size: 11.5px;
+  color: #78909c;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.site-footer .footer-bottom .divider {
+  color: #1e5fa8;
+  margin: 0 4px;
+}
+.site-footer .footer-bottom .it-badge {
+  background: #0a2a4a;
+  border: 0.5px solid #ffb74d;
+  color: #ffb74d;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.site-footer .footer-bottom .it-badge:hover {
+  color: #fff;
+  border-color: #fff;
+}
+@media (max-width: 480px) {
+  .site-footer .footer-tags .divider { display: none; }
+  .site-footer .footer-tags span { display: block; margin: 2px 0; }
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="header">
+    <div class="hosp-icon">🏥</div>
+    <h1>CPRS Note &amp; Image Retraction Instruction</h1>
+    <div class="sub">General Guidance</div>
+     </div>
+
+  <div class="affected-box">
+    <span class="icon">⚠️</span>
+    <span><strong style="color:#fff;">Important:</strong> CACs can retract regular notes directly, but <strong style="color:#fff;">cannot</strong> retract notes with an associated image. Those require a LEAF image deletion request.</span>
+  </div>
+
+  <div class="card">
+
+    <div class="card card-accent">
+      <h2>📝 Regular note (no image icon)</h2>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">Write an <strong>addendum</strong> to the note.</div>
+      </div>
+
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">State clearly in the addendum <strong>why</strong> the note needs to be made hidden.</div>
+      </div>
+
+      <div class="example-box">
+        Example: "The note was written on the wrong veteran."
+      </div>
+
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"> <strong>Tag the CAC team</strong> in the addendum so the note can be retracted for you.</div>
+      </div>
+
+    <figure>
+      <img src="https://raw.githubusercontent.com/vj1272/my_pic/refs/heads/main/NI-1.png" onerror="this.parentElement.style.display='none';">
+     <!-- <figcaption>Step 2 — Select type of request: "HAS/HIMS Image Deletion" highlighted for reference.</figcaption> -->
+    </figure>
+
+
+
+     <!-- <div style="margin-top:14px;">
+        <a class="link-btn" href="#">
+          <span class="lbl">Quick link</span>
+          📄 To Request a CPRS Note to Be Hidden/Retracted
+        </a>
+      </div>-->
+    </div> 
+ </div>
+<div class="card">
+    <div class="card card-orange">
+      <h2>👤 Author matching rule</h2>
+      <ul class="checklist">
+        <li><span class="check">✓</span> The author of the note or addendum must match the person requesting retraction</li>
+        <li><span class="check">✓</span> Only submit a retraction request for someone else's note if you are their <strong style="color:#fff;">supervisor</strong></li>
+        <li><span class="check">✓</span> If acting as a supervisor, this relationship must be identified in the request</li>
+      </ul>
+    </div>
+</div>
+ 
+<br>
+  <div class="card card-accent">
+    <h2>🖼️ Note with an image — LEAF image deletion request</h2>
+    <div class="step">
+      <div class="step-text" style="padding-top:0;">Complete the same addendum steps above, <strong>plus</strong> submit an image deletion request through the Durham LEAF Portal:</div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">In CPRS, go to Tools > Imaging (VistA Imaging Display), Select the correct Image and locate <strong> "Image ID#" </strong> </div>
+    </div>
+
+    <figure>
+      <img src="https://raw.githubusercontent.com/vj1272/my_pic/refs/heads/main/Nt-4.png" alt="Image Deletion Request Information form" onerror="this.parentElement.style.display='none';">
+     <!--<figcaption>Image Deletion Request Information form — fill out all fields shown.</figcaption>-->
+    </figure>
+
+    <div class="step" style="margin-top:14px;">
+      <div class="step-num">2</div>
+      <div class="step-text">Go to the <a href= "https://leaf.va.gov/VISN6/558/requestportal/?a=newform/" > <strong>Durham LEAF Portals.</strong></a></div>
+    </div>
+    <!--<div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Click <strong>"Durham LEAF Portal."</strong></div>
+    </div>-->
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Select <strong>"New Request."</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">In <strong>Step 1</strong>, title the request: <em>"Image Deletion"</em> + Veteran's Name + last 4 digits of SSN.</div>
+    </div>
+
+    <figure>
+      <img src="https://raw.githubusercontent.com/vj1272/my_pic/refs/heads/main/NT-1.png" alt="Step 1 General Information form" onerror="this.parentElement.style.display='none';">
+      <figcaption>Step 1 — General Information: contact info, service, priority, and title of request.</figcaption>
+    </figure>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-text">In <strong>Step 2</strong>, choose <strong>"HAS/HIMS Image Deletion"</strong> (everything is listed alphabetically).</div>
+    </div>
+
+    <figure>
+      <img src="https://raw.githubusercontent.com/vj1272/my_pic/refs/heads/main/NT-2.png" alt="Step 2 Select type of request showing HAS/HIMS Image Deletion highlighted" onerror="this.parentElement.style.display='none';">
+     <!-- <figcaption>Step 2 — Select type of request: "HAS/HIMS Image Deletion" highlighted for reference.</figcaption> -->
+    </figure>
+
+
+
+
+    <div class="step">
+      <div class="step-num">6</div>
+      <div class="step-text">On the <strong>"Image Deletion Request Information"</strong> page, provide:</div>
+    </div>
+   <div class="field-tags">
+      <span class="field-tag">Veteran Name</span>
+      <span class="field-tag">Social Security Number</span>
+      <span class="field-tag">Image ID#</span>
+      <span class="field-tag">Reason for Deletion</span>
+      <span class="field-tag">Attachment (optional, max 20MB)</span>
+    </div>
+
+
+    <div class="step">
+      <div class="step-num">7</div>
+      <div class="step-text">Follow the prompts to submit. Confirm you receive a confirmation message or receipt.</div>
+    </div>
+    <!--<div class="step">
+      <div class="step-num">8</div>
+      <div class="step-text">Provide the <strong>LEAF Request Number</strong> (top right-hand corner) to our team for tracking.</div>
+    </div> -->
+    <div class="step">
+      <div class="step-num">8</div>
+      <div class="step-text">After the image is removed, <a href= "mailto:VHADURCAC@med.va.gov" class="email-link"><strong>notify CAC team</strong> </a>so we can keep the note status updated.</div>
+    </div>
+  </div>
+
+   <div class="card">
+ <!--  <div class="grid-main">
+   <div class="card card-accent">
+
+     <h2>📍 Finding the Image ID</h2>
+      <div class="step-text" style="padding-top:0; margin-bottom:10px;">
+        Navigate to: <strong style="color:#4dd0e1;">CPRS Tools → Imaging (VistA Imaging Display)</strong>
+      </div>
+      <ul class="checklist">
+        <li><span class="check">✓</span> Below the image itself</li>
+        <li><span class="check">✓</span> In the body of the image note, above the title</li>
+      </ul>
+      <figure style="margin-left:0;">
+        <img src="https://raw.githubusercontent.com/vj1272/my_pic/refs/heads/main/leaf-imageid.png" alt="Property panel showing Image ID field highlighted" onerror="this.parentElement.style.display='none';">
+        <figcaption>Image ID# highlighted in the Property panel.</figcaption>
+      </figure>
+    </div> -->
+
+    <div class="card card-red">
+      <h2>🚫 Don'ts</h2>
+      <div class="donts-grid">
+        <div class="dont-item"><span class="xmark">✗</span> Retract an image-note yourself</div>
+        <div class="dont-item"><span class="xmark">✗</span> Submit for someone else's note without supervisor status</div>
+        <div class="dont-item"><span class="xmark">✗</span> Skip identifying the supervisor relationship</div>
+        <div class="dont-item"><span class="xmark">✗</span> Submit duplicate LEAF requests for the same image</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <footer class="site-footer">
+    <div class="footer-contact">
+      <strong>Questions? Contact</strong>
+      &nbsp;<a href="mailto:VHADURCAC@med.va.gov" class="email-link">VHADURCAC</a>
+    </div>
+
+    <div class="footer-tags">
+      <span>Data Analytics</span><span class="divider">·</span>
+      <span>Informatics</span><span class="divider">·</span>
+      <span>CPRS Support</span>
+    </div>
+
+    <div class="footer-bottom">
+      <span>Durham VA Medical Center</span>
+      <span class="divider">|</span>
+      <span>Use <a href="https://yourit.va.gov/va?id=sc_cat_item&sys_id=45dd608687efa150765d77f5cebb35ef&cat_id=52031dc01bf5e810a25d0d08ec4bcbdd&catalog_id=b6f0db901b462010a25d0d08ec4bcb47" class="it-badge">YourIT</a> for all submissions</span>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
