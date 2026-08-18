@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DVAHCS VistA/CPRS Request Forms</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 24px;
+    color: #d6e4f0;
+    background: #0a1e33;
+  }
+  .card {
+    background: #0f2c4a;
+    border-radius: 10px;
+    border: 1px solid #1e4368;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    overflow: hidden;
+  }
+  .header {
+    background: linear-gradient(135deg, #1b5fa8, #1e77c4);
+    padding: 28px 32px;
+    text-align: center;
+  }
+  .header h2 { font-size: 24px; margin: 0 0 6px; color: #fff; font-weight: 700; }
+  .header .sub { color: #bcd9f5; font-size: 14px; }
+  .body { padding: 32px; }
+  .banner {
+    background: #12314f;
+    border-left: 4px solid #f0a030;
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 26px;
+  }
+  .banner strong { color: #fff; }
+  .predecisional {
+    text-align: center;
+    color: #ff7a5c;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    margin: -2px 0 20px;
+  }
+  .red { color: #ff7a5c; font-weight: 700; }
+  .intro { font-size: 14px; line-height: 1.6; margin-bottom: 24px; color: #b8cfe4; }
+  .intro strong { color: #fff; }
+  .field { margin-bottom: 20px; }
+  label.q {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 15px;
+    color: #e8f2fb;
+  }
+  .sublabel { font-weight: 500; }
+  .hint { font-style: italic; font-weight: 400; color: #7fa5c9; font-size: 13px; }
+  input[type="text"], input[type="date"], textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #2b5580;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #0a2138;
+    color: #eaf3fb;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #34c3d6;
+    box-shadow: 0 0 0 2px rgba(52,195,214,0.25);
+  }
+  input::placeholder { color: #5c7ea0; }
+  textarea { min-height: 70px; resize: vertical; overflow: hidden; }
+  /* Auto-growing text fields: wrap to next line and expand, no data limit */
+  textarea.autogrow, input.autogrow {
+    overflow: hidden;
+    resize: none;
+  }
+  input[type="date"] { color-scheme: dark; }
+  .radio-group label, .check-group label {
+    display: block;
+    margin: 8px 0;
+    font-size: 14px;
+    cursor: pointer;
+    color: #cfe0f0;
+  }
+  .radio-group input, .check-group input {
+    margin-right: 9px;
+    accent-color: #34c3d6;
+  }
+  hr { border: none; border-top: 1px solid #1e4368; margin: 24px 0; }
+  .row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .row .field { flex: 1; min-width: 200px; }
+  .btns { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .primary { background: #1e77c4; color: #fff; }
+  .primary:hover { background: #1a68ab; }
+  .secondary { background: #17435f; color: #cfe6f5; border: 1px solid #2b6a94; }
+  .secondary:hover { background: #1c5478; }
+  .btns { align-items: flex-start; }
+  .yourit-btn-wrap { display: flex; flex-direction: column; align-items: center; }
+  .btn-link {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    padding: 6px 24px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+    line-height: 1.15;
+  }
+  .btn-subline {
+    display: block;
+    font-size: 10px;
+    color: #bcd9f5;
+    margin-top: 0;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.1;
+  }
+  .notice-banner {
+    margin-top: 22px;
+    background: #12314f;
+    border: 1px solid #f0a030;
+    border-left: 4px solid #f0a030;
+    border-radius: 6px;
+    padding: 14px 18px;
+    color: #f0a030;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* Form-type selector */
+  .selector {
+    background: #0c2740;
+    border: 1px solid #234a70;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 26px;
+  }
+  .selector .q { color: #34c3d6; margin-bottom: 12px; }
+  .type-options { display: flex; flex-wrap: wrap; gap: 12px; }
+  .type-card {
+    flex: 1;
+    min-width: 200px;
+    border: 1px solid #2b5580;
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #0a2138;
+  }
+  .type-card:hover { border-color: #34c3d6; }
+  .type-card.active {
+    border-color: #34c3d6;
+    background: #103454;
+    box-shadow: 0 0 0 1px #34c3d6;
+  }
+  .type-card input { accent-color: #34c3d6; margin-right: 8px; }
+  .type-card .t-title { font-weight: 700; color: #eaf3fb; font-size: 15px; }
+  .type-card .t-desc { font-size: 12px; color: #7fa5c9; margin-top: 4px; }
+  .type-card.others { display: block; text-decoration: none; }
+  .type-card.others .t-title { color: #f0a030; }
+  .type-card.others:hover { border-color: #f0a030; }
+
+  .config {
+    background: #0c2740;
+    border: 1px solid #234a70;
+    padding: 18px;
+    border-radius: 8px;
+    margin-top: 26px;
+  }
+  .config label.q { color: #34c3d6; }
+  .form-section { display: none; }
+  .form-section.active { display: block; }
+  .stop-note {
+    background: #2a1414;
+    border-left: 4px solid #ff7a5c;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #ffbfb0;
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .subq { margin-left: 18px; }
+  a { color: #34c3d6; }
+
+  /* CAC YourIT link block above ticket field */
+  .cac-link-block {
+    background: #12314f;
+    border-left: 4px solid #f0a030;
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-bottom: 18px;
+    font-size: 14px;
+  }
+  .cac-link-block a {
+    color: #f0a030;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .cac-link-block a:hover { text-decoration: underline; }
+
+  /* Footer */
+  .footer {
+    background: #0a2138;
+    border-top: 1px solid #1e4368;
+    padding: 22px 32px;
+    text-align: center;
+  }
+  .footer .contact {
+    font-size: 15px;
+    font-weight: 700;
+    color: #e8f2fb;
+    margin-bottom: 8px;
+  }
+  .footer .contact .name { color: #34c3d6; }
+  .footer .links {
+    font-size: 14px;
+    color: #6bb8e0;
+    margin-bottom: 12px;
+  }
+  .footer .links span { margin: 0 12px; font-weight: 600; }
+  .footer .sub-line {
+    font-size: 13px;
+    color: #5c7ea0;
+  }
+  .footer .yourit-pill {
+    background: #f0a030;
+    color: #0a1e33;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 10px;
+    margin: 0 4px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <h2>DVAHCS CPRS Build &amp; Change Requests</h2>
+    <div class="sub">Consult · Menu/Order · Template &amp; Progress Note</div>
+  </div>
+
+  <div class="body">
+    <div class="predecisional">PRE-DECISIONAL | INTERNAL VA USE ONLY</div>
+
+    <div class="banner">
+      <strong>Important:</strong> All CPRS issues, requests, and updates must be submitted through the YourIT portal. Do not submit via email or instant message. Only one document entry is allowed at a time.
+    </div>
+
+    <!-- FORM TYPE SELECTOR -->
+    <div class="selector">
+      <label class="q">Select the request form you want to complete:</label>
+      <div class="type-options">
+        <label class="type-card" id="card-consult">
+          <input type="radio" name="formType" value="consult" onchange="switchForm('consult')">
+          <span class="t-title">Consult Request</span>
+          <div class="t-desc">New/Revised order builds</div>
+        </label>
+        <label class="type-card" id="card-menu">
+          <input type="radio" name="formType" value="menu" onchange="switchForm('menu')">
+          <span class="t-title">Menus &amp; Order</span>
+          <div class="t-desc">Menu, order, or order set</div>
+        </label>
+        <label class="type-card" id="card-note">
+          <input type="radio" name="formType" value="note" onchange="switchForm('note')">
+          <span class="t-title">Templates &amp; Notes</span>
+          <div class="t-desc">Templates, boilerplates, titles</div>
+        </label>
+        <a class="type-card others" id="card-others"
+           href="https://yourit.va.gov/va?id=sc_cat_item&sys_id=45dd608687efa150765d77f5cebb35ef&cat_id=52031dc01bf5e810a25d0d08ec4bcbdd&catalog_id=b6f0db901b462010a25d0d08ec4bcb47"
+           target="_blank" rel="noopener noreferrer">
+          <span class="t-title">All Other Requests</span>
+          <div class="t-desc">Will open YourIT (SNOW) Request on a different browser</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ================= CONSULT FORM ================= -->
+    <div class="form-section" id="form-consult">
+      <div class="stop-note">*** If you do not have the consult clinic built, STOP and email GPM team. ***</div>
+      <p class="intro">Consult Request (New/Revised order builds only). A separate SNOW ticket should be entered for each consult request.</p>
+
+      <div class="row">
+        <div class="field"><label class="q">Name of Requester:</label><input type="text" id="c_requester"></div>
+        <div class="field"><label class="q">Service line:</label><input type="text" id="c_serviceline"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label class="q">Supervisor/Chief:</label><input type="text" id="c_supervisor"></div>
+        <div class="field"><label class="q">Date Requested:</label><input type="date" id="c_date"></div>
+      </div>
+
+      <hr>
+      <div class="field radio-group">
+        <label class="q">1. Is this request for a new, revised, disabling, or troubleshooting a consult service?</label>
+        <label><input type="radio" name="c_action" value="New">New</label>
+        <label><input type="radio" name="c_action" value="Revised">Revised</label>
+        <label><input type="radio" name="c_action" value="Disabling">Disabling (Please explain below)</label>
+        <label><input type="radio" name="c_action" value="Troubleshooting">Troubleshooting (Please explain below)</label>
+        <textarea id="c_action_explain" placeholder="Explanation (if disabling or troubleshooting)"></textarea>
+      </div>
+
+      <div class="field radio-group">
+        <label class="q">2. What consult type are you looking to create, revise, or disable?</label>
+        <label><input type="radio" name="c_type" value="Outpatient" onchange="updateConsultSections()">Outpatient</label>
+        <label><input type="radio" name="c_type" value="Inpatient" onchange="updateConsultSections()">Inpatient</label>
+        <label><input type="radio" name="c_type" value="E-consult" onchange="updateConsultSections()">E-consult</label>
+        <label><input type="radio" name="c_type" value="Clinical Procedure (CP)" onchange="updateConsultSections()">Clinical Procedure (CP)</label>
+        <label><input type="radio" name="c_type" value="Interfacility Consults (IFC)" onchange="updateConsultSections()">Interfacility Consults (IFC)</label>
+        <label><input type="radio" name="c_type" value="Prosthetics" onchange="updateConsultSections()">Prosthetics</label>
+        <label><input type="radio" name="c_type" value="Community Care" onchange="updateConsultSections()">Community Care</label>
+      </div>
+
+      <div id="consult-rest" style="display:none;">
+      <div class="field"><label class="q">3. Consult name: <span class="hint">(i.e. inpatient/outpatient, CP, E-consult, Prosthetics, Care in the Community, or IFC consult)</span></label><input type="text" id="c_name"></div>
+      <div class="field"><label class="q">4. Who are the clinical alert recipients on this consult order?</label><textarea id="c_clinical"></textarea></div>
+      <div class="field"><label class="q">5. Who are the administrative alert recipient(s)? <span class="hint">(function: to assist in making the consult appointment)</span></label><textarea id="c_admin"></textarea></div>
+
+      <div class="field radio-group">
+        <label class="q">6. Is there any information for the consult pre-requisite screen (seen right before the order entry template)? <span class="hint">(Attach pre-requisite information to YourIT ticket)</span></label>
+        <label><input type="radio" name="c_prereq" value="Yes">Yes</label>
+        <label><input type="radio" name="c_prereq" value="No">No</label>
+      </div>
+
+      <div class="field"><label class="q">7. What information for the consult template reason for request (providers fill out)? <span class="hint">(Attach reason-for-request template to YourIT ticket)</span></label><textarea id="c_reason"></textarea></div>
+      <div class="field"><label class="q">8. What stop codes would you like added (Primary, Secondary, etc.)? <span class="hint">(Same as stop codes on the consult clinic)</span></label><textarea id="c_stopcodes"></textarea></div>
+      <div class="field"><label class="q">9. What clinic(s) will your consult order(s) be linked to?</label><textarea id="c_clinics"></textarea></div>
+      <div class="field"><label class="q">10. What is the projected GO-Live date for this consult?</label><input type="text" id="c_golive"></div>
+      <div class="field"><label class="q">11. What order menu(s) in CPRS would you like the consult added?</label><textarea id="c_menus"></textarea></div>
+
+      <div id="consult-ifc-block">
+        <hr>
+        <div class="field"><label class="q">12. IFC (Interfacility Consult):</label>
+          <div class="field subq"><label class="q sublabel">a. Incoming IFC request? If so, name of the order:</label><input type="text" id="c_ifc_in"></div>
+          <div class="field subq"><label class="q sublabel">b. Outgoing IFC request?</label><input type="text" id="c_ifc_out"></div>
+          <div class="field subq"><label class="q sublabel">c. Clinical points of contact for receiving/sending site:</label><textarea id="c_ifc_poc"></textarea></div>
+          <div class="field subq radio-group"><label class="q sublabel">d. Service Coordination established between sites? <span class="hint">(If so attach Care Coordination Agreement, or email vhadurcac@med.va.gov)</span></label>
+            <label><input type="radio" name="c_ifc_coord" value="Yes">Yes</label>
+            <label><input type="radio" name="c_ifc_coord" value="No">No</label>
+          </div>
+        </div>
+      </div>
+
+      <div id="consult-cp-block">
+        <hr>
+        <div class="field"><label class="q"><span id="cp-num">12</span>. CP (Clinical Procedure) consults:</label>
+          <div class="field subq"><label class="q sublabel">a. What procedures are you looking to modify/create new?</label><textarea id="c_cp_proc"></textarea></div>
+          <div class="field subq"><label class="q sublabel">b. Name of the new vendor to install new software system:</label><input type="text" id="c_cp_vendor"></div>
+          <div class="field subq"><label class="q sublabel">c. Vendor's contact information:</label><input type="text" id="c_cp_contact"></div>
+          <div class="field subq"><label class="q sublabel">d. Have all parties (Service, HTM/BIO MED, OIT, Informatics) been made aware of this install?</label><input type="text" id="c_cp_parties"></div>
+          <div class="field subq"><label class="q sublabel">e. Date of anticipated CP install kick-off call:</label><input type="text" id="c_cp_kickoff"></div>
+        </div>
+      </div>
+
+      <div class="field radio-group"><label class="q"><span id="golive-num">13</span>. Has a go-live date been determined by all parties?</label>
+        <label><input type="radio" name="c_golive_all" value="Yes">Yes</label>
+        <label><input type="radio" name="c_golive_all" value="No">No</label>
+        <label class="q sublabel" style="margin-top:8px;">If yes, anticipated go-live time frame agreed upon with service:</label>
+        <input type="text" id="c_golive_frame">
+      </div>
+      </div>
+    </div>
+
+    <!-- ================= MENU / ORDER FORM ================= -->
+    <div class="form-section" id="form-menu">
+      <p class="intro">This form is for DVAHCS request. Please use this form to request <strong>the creation, modification, or termination/deactivation</strong> of a menu, order, or order set. Complete all information and attach additional information, as required. Submit form via "VistA/CPRS Request – YourIT/SNOW" as an attachment. All new menu, order, or order set requests <span class="red">must</span> include an attached Word document with a mock-up of the item. Requests submitted without this attachment <strong>will be closed.</strong></p>
+
+      <div class="row">
+        <div class="field"><label class="q">1. Date of Request <span class="hint">(Today's Date)</span></label><input type="date" id="m_date"></div>
+        <div class="field"><label class="q">2. Desired completion date <span class="hint">(Activation Date)</span></label><input type="date" id="m_complete"></div>
+      </div>
+      <div class="field"><label class="q">3. Provide reason for the request:</label><textarea id="m_reason"></textarea></div>
+
+      <hr>
+      <div class="field radio-group">
+        <label class="q">4. Is this a request for (Choose one):</label>
+
+        <label><input type="radio" name="m_for" value="New" onchange="updateMenuForBoxes()">New</label>
+        <div class="field subq check-group" id="m_new_box_wrap" style="display:none;">
+          <label><input type="checkbox" name="m_new_items" value="Menu" onchange="updateMenuForBoxes()">Menu</label>
+          <div class="field subq" id="m_new_menu_wrap" style="display:none;"><textarea id="m_new_menu_detail" placeholder="Include mockup, describe where new menu/order to be placed"></textarea></div>
+          <label><input type="checkbox" name="m_new_items" value="Order" onchange="updateMenuForBoxes()">Order</label>
+          <div class="field subq" id="m_new_order_wrap" style="display:none;"><textarea id="m_new_order_detail" placeholder="Include mockup, describe where new menu/order to be placed"></textarea></div>
+          <label><input type="checkbox" name="m_new_items" value="Order Set" onchange="updateMenuForBoxes()">Order Set</label>
+          <div class="field subq" id="m_new_orderset_wrap" style="display:none;"><textarea id="m_new_orderset_detail" placeholder="Include mockup, describe where new menu/order to be placed"></textarea></div>
+        </div>
+
+        <label><input type="radio" name="m_for" value="Change Existing" onchange="updateMenuForBoxes()">Change Existing</label>
+        <div class="field subq check-group" id="m_change_box_wrap" style="display:none;">
+          <label><input type="checkbox" name="m_change_items" value="Menu" onchange="updateMenuForBoxes()">Menu</label>
+          <div class="field subq" id="m_change_menu_wrap" style="display:none;"><textarea id="m_change_menu_detail" placeholder="Include mockup, provide current path and describe where renewed menu/order should go"></textarea></div>
+          <label><input type="checkbox" name="m_change_items" value="Order" onchange="updateMenuForBoxes()">Order</label>
+          <div class="field subq" id="m_change_order_wrap" style="display:none;"><textarea id="m_change_order_detail" placeholder="Include mockup, provide current path and describe where renewed menu/order should go"></textarea></div>
+          <label><input type="checkbox" name="m_change_items" value="Order Set" onchange="updateMenuForBoxes()">Order Set</label>
+          <div class="field subq" id="m_change_orderset_wrap" style="display:none;"><textarea id="m_change_orderset_detail" placeholder="Include mockup, provide current path and describe where renewed menu/order should go"></textarea></div>
+        </div>
+
+        <label><input type="radio" name="m_for" value="Terminate/Deactivate" onchange="updateMenuForBoxes()">Terminate/Deactivate</label>
+        <div class="field subq check-group" id="m_term_box_wrap" style="display:none;">
+          <label><input type="checkbox" name="m_term_items" value="Menu" onchange="updateMenuForBoxes()">Menu</label>
+          <div class="field subq" id="m_term_menu_wrap" style="display:none;"><textarea id="m_term_menu_detail" placeholder="Provide existing path for menu or/order"></textarea></div>
+          <label><input type="checkbox" name="m_term_items" value="Order" onchange="updateMenuForBoxes()">Order</label>
+          <div class="field subq" id="m_term_order_wrap" style="display:none;"><textarea id="m_term_order_detail" placeholder="Provide existing path for menu or/order"></textarea></div>
+          <label><input type="checkbox" name="m_term_items" value="Order Set" onchange="updateMenuForBoxes()">Order Set</label>
+          <div class="field subq" id="m_term_orderset_wrap" style="display:none;"><textarea id="m_term_orderset_detail" placeholder="Provide existing path for menu or/order"></textarea></div>
+        </div>
+      </div>
+      <hr>
+      <div class="field"><label class="q">5. Signatures</label>
+        <div class="row">
+          <div class="field"><label class="q sublabel">Requested by (name)</label><input type="text" id="m_requester"></div>
+          <div class="field"><label class="q sublabel">Service / Section</label><input type="text" id="m_service"></div>
+        </div>
+      </div>
+      <div class="field check-group"><label class="q">Service Chief Approval:</label>
+        <label><input type="radio" name="m_approval" value="Approved">Approved</label>
+        <label><input type="radio" name="m_approval" value="Not Approved">Not Approved</label>
+      </div>
+    </div>
+
+    <!-- ================= PROGRESS NOTE / TEMPLATE FORM ================= -->
+    <div class="form-section" id="form-note">
+      <p class="intro">Please use this form to request the creation of new templates, change an existing template(s), boilerplates, titles, or terminate/deactivate a progress note. <strong>If this request is for data collection STOP, and submit a YourIT/SNOW ticket.</strong> Complete all information and attach additional information, as required. Submit form via "VistA/CPRS Request – YourIT/SNOW" as an attachment. All new template(s) requests <span class="red">must</span> have an attached Word document with a mock up of the template. Failure to do so will result in your ticket being CLOSED.</p>
+
+      <div class="field radio-group">
+        <label class="q">1. Is this request for a consult completion note?</label>
+        <label><input type="radio" name="n_consultnote" value="Yes">Yes</label>
+        <label><input type="radio" name="n_consultnote" value="No">No</label>
+        <label class="q sublabel" style="margin-top:8px;">If yes, Consult Service Name:</label>
+        <input type="text" id="n_consultname">
+      </div>
+      <div class="row">
+        <div class="field"><label class="q">2. Date of Request <span class="hint">(Today's date)</span></label><input type="date" id="n_date"></div>
+        <div class="field"><label class="q">3. Expected GO LIVE DATE:</label><input type="date" id="n_golive"></div>
+      </div>
+
+      <div class="field radio-group">
+        <label class="q">4. Is this a request for (Choose one):</label>
+        <label><input type="radio" name="n_for" value="New template/progress note">New template/progress note</label>
+        <label><input type="radio" name="n_for" value="Change to existing template/progress note">Change to existing template/progress note</label>
+        <label><input type="radio" name="n_for" value="Terminate/Deactivate template/progress note">Terminate/Deactivate template/progress note</label>
+      </div>
+
+      <div class="field"><label class="q">5. Provide reason for the template/progress note:</label><textarea id="n_reason"></textarea></div>
+      <div class="field"><label class="q">6. What Durham Division? <span class="hint">(Clayton, Raleigh, Garner, Cherry Point, Greenville, Morehead, etc.) — No division, location, teams, etc. allowed in note titles.</span></label><input type="text" id="n_division"></div>
+      <div class="field"><label class="q">7. Requested or current template name/title <span class="hint">(Naming conventions are subject to VA standards and directives)</span></label><input type="text" id="n_template"></div>
+      <div class="field"><label class="q">8. Please specify the intended users of this form <span class="hint">(e.g., MD, RN, LPN, SW, etc.)</span></label><input type="text" id="n_users"></div>
+
+      <hr>
+      <div class="field"><label class="q">9. Signatures</label>
+        <div class="field"><label class="q sublabel">Signature of Service Chief (name)</label><input type="text" id="n_chief"></div>
+      </div>
+      <div class="field check-group"><label class="q">Service Chief Approval:</label>
+        <label><input type="radio" name="n_approval" value="Approved">Approved</label>
+        <label><input type="radio" name="n_approval" value="Not Approved">Not Approved</label>
+      </div>
+    </div>
+
+    <!-- ================= SHARED TICKET + ACTIONS ================= -->
+    <div id="shared" style="display:none;">
+      <div class="config">
+        <div class="field" style="margin-bottom:0;">
+          <label class="q">YourIT (SNOW) Ticket No:</label>
+          <input type="text" id="ticketNo" placeholder="Enter YourIT Ticket # e.g. INC0123456 / RITM0098765 (optional if attaching this PDF to YourIT Ticket)">
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="secondary" onclick="downloadPDF()">Download as PDF</button>
+        <a class="secondary btn-link"
+           href="https://yourit.va.gov/va?id=sc_cat_item&sys_id=45dd608687efa150765d77f5cebb35ef&cat_id=52031dc01bf5e810a25d0d08ec4bcbdd&catalog_id=b6f0db901b462010a25d0d08ec4bcb47"
+           target="_blank" rel="noopener noreferrer">
+          YourIT (SNOW)
+          <span class="btn-subline">Opens in new browser</span>
+        </a>
+      </div>
+
+      <div class="notice-banner">
+        You can send the PDF directly to the CACs (include your YourIT ticket #) or attach it to the YourIT ticket you are creating.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <div class="contact">Questions? Contact <a class="name" href="mailto:VHADURCAC@med.va.gov" style="text-decoration:none;">VHADURCAC</a></div>
+    <div class="links"><span>Data Analytics</span><span>Informatics</span><span>CPRS Support</span></div>
+    <div class="sub-line"><a href="https://www.va.gov/durham-health-care/" target="_blank" style="color:#5c7ea0;text-decoration:none;">Durham VA Medical Center</a> &nbsp;|&nbsp; Use <a href="https://yourit.va.gov/va?id=sc_cat_item&sys_id=45dd608687efa150765d77f5cebb35ef&cat_id=52031dc01bf5e810a25d0d08ec4bcbdd&catalog_id=b6f0db901b462010a25d0d08ec4bcb47" target="_blank" class="yourit-pill" style="text-decoration:none;">YourIT</a> for all submissions</div>
+  </div>
+</div>
+
+<script>
+let currentForm = null;
+
+// Safely get the jsPDF constructor only when needed. Returns null if the
+// library failed to load (e.g. CDN blocked on the network).
+function getJsPDF() {
+  if (window.jspdf && window.jspdf.jsPDF) return window.jspdf.jsPDF;
+  return null;
+}
+
+function switchForm(type) {
+  currentForm = type;
+  ['consult','menu','note'].forEach(t => {
+    document.getElementById('form-' + t).classList.toggle('active', t === type);
+    document.getElementById('card-' + t).classList.toggle('active', t === type);
+  });
+  if (type === 'consult') {
+    // Reset: hide everything after Q2 until a consult type is chosen
+    const chosen = document.querySelector('input[name="c_type"]:checked');
+    if (chosen) chosen.checked = false;
+    updateConsultSections();
+  }
+  document.getElementById('shared').style.display = 'block';
+  document.getElementById('shared').scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// Reveal the rest of the Consult form based on the Q2 selection, and show
+// only the relevant conditional block (12 = IFC, or CP renumbered to 12).
+function updateConsultSections() {
+  const sel = document.querySelector('input[name="c_type"]:checked');
+  const val = sel ? sel.value : '';
+  const rest = document.getElementById('consult-rest');
+  const ifcBlock = document.getElementById('consult-ifc-block');
+  const cpBlock = document.getElementById('consult-cp-block');
+  const cpNum = document.getElementById('cp-num');
+  const goliveNum = document.getElementById('golive-num');
+
+  if (!val) {
+    // Nothing selected yet — show only Q1 and Q2
+    rest.style.display = 'none';
+    ifcBlock.style.display = 'none';
+    cpBlock.style.display = 'none';
+    return;
+  }
+
+  rest.style.display = 'block';
+
+  if (val === 'Interfacility Consults (IFC)') {
+    ifcBlock.style.display = 'block';
+    cpBlock.style.display = 'none';
+    goliveNum.textContent = '13';   // IFC = 12, go-live = 13
+  } else if (val === 'Clinical Procedure (CP)') {
+    ifcBlock.style.display = 'none';
+    cpBlock.style.display = 'block';
+    cpNum.textContent = '12';        // CP becomes section 12 when it's the shown block
+    goliveNum.textContent = '13';    // CP = 12, go-live = 13
+  } else {
+    ifcBlock.style.display = 'none';
+    cpBlock.style.display = 'none';
+    goliveNum.textContent = '12';    // no conditional block, go-live = 12
+  }
+}
+
+// Show the right sub-inputs for "Is this a request for" (Menus & Order Q4)
+function updateMenuForBoxes() {
+  const sel = document.querySelector('input[name="m_for"]:checked');
+  const val = sel ? sel.value : '';
+  document.getElementById('m_new_box_wrap').style.display    = (val === 'New') ? 'block' : 'none';
+  document.getElementById('m_change_box_wrap').style.display = (val === 'Change Existing') ? 'block' : 'none';
+  document.getElementById('m_term_box_wrap').style.display   = (val === 'Terminate/Deactivate') ? 'block' : 'none';
+
+  // Per-checkbox text boxes for New
+  toggleBox('m_new_items', 'Menu',      'm_new_menu_wrap');
+  toggleBox('m_new_items', 'Order',     'm_new_order_wrap');
+  toggleBox('m_new_items', 'Order Set', 'm_new_orderset_wrap');
+  // Per-checkbox text boxes for Change Existing
+  toggleBox('m_change_items', 'Menu',      'm_change_menu_wrap');
+  toggleBox('m_change_items', 'Order',     'm_change_order_wrap');
+  toggleBox('m_change_items', 'Order Set', 'm_change_orderset_wrap');
+  // Per-checkbox text boxes for Terminate/Deactivate
+  toggleBox('m_term_items', 'Menu',      'm_term_menu_wrap');
+  toggleBox('m_term_items', 'Order',     'm_term_order_wrap');
+  toggleBox('m_term_items', 'Order Set', 'm_term_orderset_wrap');
+}
+
+// Helper: show a wrapper only if the matching checkbox in a group is checked
+function toggleBox(groupName, value, wrapId) {
+  const cb = document.querySelector(`input[name="${groupName}"][value="${value}"]`);
+  const wrap = document.getElementById(wrapId);
+  if (cb && wrap) wrap.style.display = cb.checked ? 'block' : 'none';
+}
+
+const g = id => { const el = document.getElementById(id); return el ? (el.value || '').trim() : ''; };
+const radio = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : '(not selected)'; };
+const checks = name => { const els = document.querySelectorAll(`input[name="${name}"]:checked`); return els.length ? Array.from(els).map(e => e.value).join(', ') : ''; };
+const isChecked = (name, value) => { const el = document.querySelector(`input[name="${name}"][value="${value}"]`); return el ? el.checked : false; };
+
+function collect() {
+  if (currentForm === 'consult') {
+    const consultType = radio('c_type');
+    const isIFC = consultType === 'Interfacility Consults (IFC)';
+    const isCP = consultType === 'Clinical Procedure (CP)';
+    const rows = [
+      ['Name of Requester', g('c_requester')],
+      ['Service line', g('c_serviceline')],
+      ['Supervisor/Chief', g('c_supervisor')],
+      ['Date Requested', g('c_date')],
+      ['1. New/Revised/Disabling/Troubleshooting', radio('c_action')],
+      ['   Explanation', g('c_action_explain')],
+      ['2. Consult type', consultType],
+      ['3. Consult name', g('c_name')],
+      ['4. Clinical alert recipients', g('c_clinical')],
+      ['5. Administrative alert recipients', g('c_admin')],
+      ['6. Pre-requisite screen info', radio('c_prereq')],
+      ['7. Template reason for request info', g('c_reason')],
+      ['8. Stop codes', g('c_stopcodes')],
+      ['9. Linked clinic(s)', g('c_clinics')],
+      ['10. Projected GO-Live date', g('c_golive')],
+      ['11. Order menu(s) in CPRS', g('c_menus')]
+    ];
+    if (isIFC) {
+      rows.push(
+        ['12a. Incoming IFC request / order name', g('c_ifc_in')],
+        ['12b. Outgoing IFC request', g('c_ifc_out')],
+        ['12c. IFC clinical POC', g('c_ifc_poc')],
+        ['12d. Service Coordination established', radio('c_ifc_coord')]
+      );
+    }
+    if (isCP) {
+      rows.push(
+        ['12a. CP procedures', g('c_cp_proc')],
+        ['12b. CP new vendor', g('c_cp_vendor')],
+        ['12c. Vendor contact', g('c_cp_contact')],
+        ['12d. All parties aware', g('c_cp_parties')],
+        ['12e. CP kick-off call date', g('c_cp_kickoff')]
+      );
+    }
+    const goliveNum = (isIFC || isCP) ? '13' : '12';
+    rows.push(
+      [goliveNum + '. Go-live determined by all parties', radio('c_golive_all')],
+      ['   Anticipated go-live time frame', g('c_golive_frame')]
+    );
+    return { title: 'DVAHCS Consult Request Form', short: 'Consult', rows };
+  }
+  if (currentForm === 'menu') {
+    const mFor = radio('m_for');
+    const itemDetails = (grp, mId, oId, sId) => {
+      const parts = [];
+      if (isChecked(grp,'Menu'))      parts.push('Menu: ' + (g(mId) || '(no detail)'));
+      if (isChecked(grp,'Order'))     parts.push('Order: ' + (g(oId) || '(no detail)'));
+      if (isChecked(grp,'Order Set')) parts.push('Order Set: ' + (g(sId) || '(no detail)'));
+      return parts.join(' | ');
+    };
+    let mForDetail = '';
+    if (mFor === 'New') {
+      mForDetail = itemDetails('m_new_items','m_new_menu_detail','m_new_order_detail','m_new_orderset_detail');
+    } else if (mFor === 'Change Existing') {
+      mForDetail = itemDetails('m_change_items','m_change_menu_detail','m_change_order_detail','m_change_orderset_detail');
+    } else if (mFor === 'Terminate/Deactivate') {
+      mForDetail = itemDetails('m_term_items','m_term_menu_detail','m_term_order_detail','m_term_orderset_detail');
+    }
+    return { title: 'DVAHCS Menus and Order Request Form', short: 'Menu-Order', rows: [
+      ['1. Date of Request', g('m_date')],
+      ['2. Desired completion date', g('m_complete')],
+      ['3. Reason for the request', g('m_reason')],
+      ['4. Is this a request for', mFor],
+      ['   Items / details', mForDetail],
+      ['5. Requested by', g('m_requester')],
+      ['   Service / Section', g('m_service')],
+      ['Service Chief Approval', radio('m_approval')]
+    ]};
+  }
+  if (currentForm === 'note') {
+    return { title: 'DVAHCS Electronic Templates, Boilerplates, and Titles Request Form', short: 'Template-Note', rows: [
+      ['1. Consult completion note', radio('n_consultnote')],
+      ['   Consult Service Name', g('n_consultname')],
+      ['2. Date of Request', g('n_date')],
+      ['3. Expected GO LIVE DATE', g('n_golive')],
+      ['4. Is this a request for', radio('n_for')],
+      ['5. Reason for template/progress note', g('n_reason')],
+      ['6. Durham Division', g('n_division')],
+      ['7. Requested/current template name', g('n_template')],
+      ['8. Intended users', g('n_users')],
+      ['9. Signature of Service Chief', g('n_chief')],
+      ['Service Chief Approval', radio('n_approval')]
+    ]};
+  }
+  return null;
+}
+
+function buildPDF() {
+  const jsPDF = getJsPDF();
+  if (!jsPDF) {
+    alert('The PDF library could not be loaded. This is often caused by network/firewall restrictions blocking the external script. Please try again on a network that allows it, or use the "CAC YourIT Request" link to submit through the portal.');
+    return null;
+  }
+  const data = collect();
+  const ticket = g('ticketNo');
+  const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+  const pageW = doc.internal.pageSize.getWidth();
+  const margin = 50;
+
+  if (typeof doc.autoTable !== 'function') {
+    // Fallback: AutoTable didn't load — use simple line layout
+    return buildPDFSimple(doc, data, ticket, margin, pageW);
+  }
+
+  // --- Header band ---
+  doc.setFillColor(30, 119, 196);
+  doc.rect(0, 0, pageW, 70, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(15);
+  doc.text(data.title, margin, 32);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(220, 235, 250);
+  doc.text('DVAHCS CPRS Build & Change Requests', margin, 50);
+
+  // --- Pre-decisional + ticket line ---
+  let startY = 90;
+  doc.setTextColor(192, 57, 43);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.text('PRE-DECISIONAL | INTERNAL VA USE ONLY', margin, startY);
+  startY += 16;
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(11);
+  doc.text('YourIT (SNOW) Ticket No: ' + (ticket || '__________'), margin, startY);
+  startY += 12;
+
+  // --- Build table body; indented rows become styled sub-rows ---
+  const body = data.rows.map(([label, val]) => {
+    const isSub = label.startsWith('   ');
+    const cleanLabel = label.trim();
+    let cleanVal = (val === '' || val === '(not selected)') ? '—' : val;
+    return {
+      cells: [cleanLabel, cleanVal],
+      isSub
+    };
+  });
+
+  doc.autoTable({
+    startY: startY + 8,
+    margin: { left: margin, right: margin },
+    head: [['Field', 'Response']],
+    body: body.map(r => r.cells),
+    styles: {
+      font: 'helvetica',
+      fontSize: 10,
+      cellPadding: 6,
+      valign: 'top',
+      lineColor: [200, 210, 220],
+      lineWidth: 0.5,
+      textColor: [30, 40, 50]
+    },
+    headStyles: {
+      fillColor: [15, 44, 74],
+      textColor: [255, 255, 255],
+      fontStyle: 'bold',
+      fontSize: 10
+    },
+    columnStyles: {
+      0: { cellWidth: 200, fontStyle: 'bold', fillColor: [240, 245, 250] },
+      1: { cellWidth: 'auto' }
+    },
+    alternateRowStyles: { fillColor: [250, 252, 254] },
+    didParseCell: function (hookData) {
+      // Style indented sub-rows lighter/italic
+      if (hookData.section === 'body') {
+        const row = body[hookData.row.index];
+        if (row && row.isSub) {
+          hookData.cell.styles.textColor = [90, 100, 115];
+          hookData.cell.styles.fontStyle = 'italic';
+          if (hookData.column.index === 0) {
+            hookData.cell.styles.fillColor = [248, 250, 252];
+            hookData.cell.styles.fontStyle = 'italic';
+          }
+        }
+      }
+    },
+    didDrawPage: function (hookData) {
+      // Footer on each page
+      const ph = doc.internal.pageSize.getHeight();
+      doc.setFontSize(8);
+      doc.setTextColor(120, 130, 140);
+      doc.text('Durham VA Medical Center — Submit via YourIT (SNOW)', margin, ph - 24);
+      const pageNum = doc.internal.getNumberOfPages();
+      doc.text('Page ' + hookData.pageNumber + ' of ' + pageNum, pageW - margin, ph - 24, { align: 'right' });
+    }
+  });
+
+  return doc;
+}
+
+// Fallback simple layout if AutoTable is unavailable
+function buildPDFSimple(doc, data, ticket, margin, pageW) {
+  let y = margin;
+  const maxW = pageW - margin * 2;
+  const line = (text, opts = {}) => {
+    doc.setFont('helvetica', opts.bold ? 'bold' : 'normal');
+    doc.setFontSize(opts.size || 10);
+    doc.setTextColor(...(opts.color || [0,0,0]));
+    const wrapped = doc.splitTextToSize(text, opts.width || maxW);
+    wrapped.forEach(w => {
+      if (y > 750) { doc.addPage(); y = margin; }
+      doc.text(w, opts.x || margin, y);
+      y += (opts.size || 10) + 4;
+    });
+  };
+  line(data.title, { bold:true, size:14 });
+  line('PRE-DECISIONAL | INTERNAL VA USE ONLY', { size:9, color:[192,57,43] });
+  y += 4;
+  doc.setDrawColor(30,119,196); doc.setLineWidth(2);
+  doc.line(margin, y, pageW - margin, y);
+  y += 16;
+  line('YourIT (SNOW) Ticket No: ' + (ticket || '__________'), { bold:true, size:11 });
+  y += 8;
+  data.rows.forEach(([label, val]) => {
+    if (val === '' || val === '(not selected)') val = '__________';
+    line(label + ':', { bold:true });
+    line(val, { x: margin + 12 });
+    y += 4;
+  });
+  return doc;
+}
+
+function fileName() {
+  const data = collect();
+  const ticket = g('ticketNo') || 'NoTicket';
+  return 'VistA_CPRS_' + data.short + '_' + ticket + '.pdf';
+}
+
+function validate() {
+  if (!currentForm) { alert('Please select a request form first.'); return false; }
+  return true;
+}
+
+function downloadPDF() {
+  if (!validate()) return;
+  const doc = buildPDF();
+  if (doc) doc.save(fileName());
+}
+
+function submitForm() {
+  if (!validate()) return;
+  const recipient = g('recipient');
+  if (!recipient) { alert('Please enter a recipient email address.'); return; }
+
+  const doc = buildPDF();
+  if (!doc) return;
+  doc.save(fileName());
+
+  const data = collect();
+  const ticket = g('ticketNo');
+
+  const sep = '========================================';
+  const thin = '----------------------------------------';
+  const bodyLines = [
+    sep,
+    data.title,
+    'DVAHCS CPRS Build & Change Requests',
+    'PRE-DECISIONAL | INTERNAL VA USE ONLY',
+    sep,
+    '',
+    'YourIT (SNOW) Ticket No: ' + ticket,
+    thin,
+    ''
+  ];
+
+  data.rows.forEach(([label, val]) => {
+    const isSub = label.startsWith('   ');
+    const cleanLabel = label.trim();
+    let cleanVal = (val === '' || val === '(not selected)') ? '(blank)' : val;
+    if (isSub) {
+      // Indented sub-item under the previous field
+      bodyLines.push('      - ' + cleanLabel + ': ' + cleanVal);
+    } else {
+      bodyLines.push(cleanLabel);
+      bodyLines.push('   ' + cleanVal);
+      bodyLines.push('');
+    }
+  });
+
+  bodyLines.push(thin);
+  bodyLines.push('Durham VA Medical Center - Submit via YourIT (SNOW)');
+  bodyLines.push('');
+  bodyLines.push('*** The formatted PDF has been downloaded. Please attach "' + fileName() + '"');
+  bodyLines.push('    (and the required mock-up document) before sending. ***');
+
+  const subject = 'VistA/CPRS Request - ' + data.short + ' - Ticket ' + ticket;
+  const mailto = 'mailto:' + encodeURIComponent(recipient)
+    + '?subject=' + encodeURIComponent(subject)
+    + (g('cc') ? '&cc=' + encodeURIComponent(g('cc')) : '')
+    + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+  window.location.href = mailto;
+}
+
+// ---- Auto-grow text fields: wrap and expand to fit all entered data ----
+// Fields that should stay single-line/special (ticket, dates, go-live)
+const KEEP_AS_INPUT = new Set([
+  'ticketNo',
+  'c_golive','c_golive_frame','c_cp_kickoff','n_golive'
+]);
+
+function autoSize(el) {
+  el.style.height = 'auto';
+  el.style.height = (el.scrollHeight) + 'px';
+}
+
+// Convert a single-line text input into an auto-growing textarea, preserving id/value/placeholder
+function convertInputToTextarea(input) {
+  const ta = document.createElement('textarea');
+  ta.id = input.id;
+  ta.value = input.value;
+  if (input.placeholder) ta.placeholder = input.placeholder;
+  ta.className = (input.className ? input.className + ' ' : '') + 'autogrow';
+  ta.rows = 1;
+  ta.style.minHeight = '42px';
+  input.parentNode.replaceChild(ta, input);
+  ta.addEventListener('input', () => autoSize(ta));
+  autoSize(ta);
+}
+
+document.querySelectorAll('input[type="text"]').forEach(inp => {
+  if (!KEEP_AS_INPUT.has(inp.id)) convertInputToTextarea(inp);
+});
+
+// Make every existing textarea auto-grow too
+document.querySelectorAll('textarea').forEach(ta => {
+  ta.classList.add('autogrow');
+  ta.addEventListener('input', () => autoSize(ta));
+  autoSize(ta);
+});
+
+// default dates
+['c_date','m_date','n_date'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.valueAsDate = new Date();
+});
+</script>
+</body>
+</html>
